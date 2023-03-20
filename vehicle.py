@@ -58,7 +58,7 @@ class Vehicle(Sprite):
             return
         
 
-        # POPRAWIC HAMOWANIE
+        #TODO fix breaking logic
 
         if self.speed.x != 0 and self.accelerates_horizontaly == False:
             max_breaking = self.friction_coefficient if self.speed.x * self.friction_coefficient < self.friction_coefficient else self.speed.x * self.friction_coefficient
