@@ -20,8 +20,8 @@ class Vehicle(Sprite):
         self.accelerates_horizontaly = False
         self.accelerates_vertically = False
         self.speed = Vector(0.0, 0.0)
-        self.friction_coefficient = 0.001
-        self.max_acceleration = 0.025
+        self.friction_coefficient = 0.015
+        self.max_acceleration = 0.5
 
 
     def move(self, pressed_key):
@@ -53,29 +53,13 @@ class Vehicle(Sprite):
         if self.speed.x == 0 and self.speed.y == 0:
             return
     
-
         if self.accelerates_horizontaly and self.accelerates_vertically:
             return
         
-
         #TODO fix breaking logic
 
-        if self.speed.x != 0 and self.accelerates_horizontaly == False:
-            max_breaking = self.friction_coefficient if self.speed.x * self.friction_coefficient < self.friction_coefficient else self.speed.x * self.friction_coefficient
-            horizontal_breaking = Vector(self.speed.x, 0, max_breaking)
-        else:
-            horizontal_breaking = Vector(0, 0, self.friction_coefficient)
+        break_vector = Vector(self.speed.x, self.speed.y, self.friction_coefficient)
 
-        if self.speed.y != 0 and self.accelerates_vertically == False:
-            max_breaking = self.friction_coefficient if self.speed.y * self.friction_coefficient < self.friction_coefficient else self.speed.y * self.friction_coefficient
-
-            vertical_breaking = Vector(0, self.speed.y, max_breaking)
-        else:
-            vertical_breaking = Vector(0, 0, self.friction_coefficient)
-
-        break_vector = Vector(horizontal_breaking.x, vertical_breaking.y, horizontal_breaking.current_magnitude() + vertical_breaking.current_magnitude())
-        print("----------break-----------")
-        print(break_vector)
         self.speed.sub(break_vector)
 
         self.change_x = self.speed.x
@@ -109,10 +93,10 @@ class Vehicle(Sprite):
         
         # I quadrant
         if self.speed.x > 0 and self.speed.y > 0:
-            angle = abs(angle) * -1
+            angle = -90 + abs(angle)
         # II quadrant
         elif self.speed.x < 0 and self.speed.y > 0:
-            angle = abs(angle)
+            angle = 90 - abs(angle)
         # III quadrant
         elif self.speed.x < 0 and self.speed.y < 0:
             angle = 90 + abs(angle)
@@ -125,4 +109,4 @@ class Vehicle(Sprite):
 
 
     def __str__(self) -> str:
-        return f"v {self.speed.x}, {self.speed.y}, acc_h {self.accelerates_horizontaly}, acc_v {self.accelerates_vertically}"
+        return f"v {self.speed.x}, {self.speed.y}, angle {self.angle}, acc_h {self.accelerates_horizontaly}, acc_v {self.accelerates_vertically}"

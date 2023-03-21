@@ -10,7 +10,7 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "AI_VEHICLE"
 
 # Constants used to scale our sprites from their original size
-CHARACTER_SCALING = 0.2
+CHARACTER_SCALING = 0.4
 TILE_SCALING = 0.5
 
 PLAYER_MOVEMENT_SPEED = 2
@@ -27,7 +27,7 @@ class MyGame(arcade.Window):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
         self.scene = None
-        self.player_sprite = None
+        self.vehicle = None
         self.physics_engine = None
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
@@ -35,16 +35,10 @@ class MyGame(arcade.Window):
     def setup(self):
         self.scene = arcade.Scene()
         image_source = ":resources:images/space_shooter/playerShip1_blue.png"
-        self.player_sprite = Vehicle(image_source, CHARACTER_SCALING)
-        self.player_sprite.center_x = 64
-        self.player_sprite.center_y = 128
-        self.scene.add_sprite("Player", self.player_sprite)
-
-        # for x in range(0, 1250, 64):
-        #     wall = arcade.Sprite(":resources:images/tiles/grassMid.png", TILE_SCALING)
-        #     wall.center_x = x
-        #     wall.center_y = 32
-        #     self.scene.add_sprite("Walls", wall)
+        self.vehicle = Vehicle(image_source, CHARACTER_SCALING)
+        self.vehicle.center_x = 64
+        self.vehicle.center_y = 128
+        self.scene.add_sprite("Vehicle", self.vehicle)
 
         coordinate_list = [[512, 96], [256, 96], [768, 96]]
 
@@ -61,7 +55,7 @@ class MyGame(arcade.Window):
 
         self.physics_engine = arcade.PhysicsEngineSimple(
 
-            self.player_sprite, self.scene.get_sprite_list("Walls")
+            self.vehicle, self.scene.get_sprite_list("Walls")
 
         )
 
@@ -73,13 +67,13 @@ class MyGame(arcade.Window):
         self.clear()
 
         # Draw our Scene
-        # self.player_sprite.slow_down()
+        # self.vehicle.slow_down()
 
         self.scene.draw()
 
 
     def on_key_press(self, key, modifiers):
-        self.player_sprite.move(key)
+        self.vehicle.move(key)
 
         """Called whenever a key is pressed."""
 
@@ -89,21 +83,16 @@ class MyGame(arcade.Window):
 
 
     def on_key_release(self, key, modifiers):
-        self.player_sprite.stop_acceleration_in_direction(key)
+        self.vehicle.stop_acceleration_in_direction(key)
 
 
     def on_update(self, delta_time):
 
         """Movement and game logic"""
 
-
-        # print(self.player_sprite)
-
-
-        self.player_sprite.slow_down()
+        self.vehicle.slow_down()
         # Move the player with the physics engine
         self.physics_engine.update()
-        # print(self.player_sprite)
 
 
 
